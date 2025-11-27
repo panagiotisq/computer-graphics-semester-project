@@ -4,7 +4,7 @@
 
 This is a comprehensive computer graphics project, developed in C++ and OpenGL, focusing on procedurally generating a dynamic, high-altitude hiking experience. The project emphasizes advanced techniques in environment simulation, atmospheric effects, and visual distortion.
 
-## ✨💡 Features & Graphical Techniques
+## 💡 Features & Graphical Techniques
 
 The project is structured into two main parts, demonstrating a broad range of graphics concepts:
 
