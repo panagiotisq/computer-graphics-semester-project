@@ -1,0 +1,32 @@
+#version 330 core
+out vec4 FragColor;
+
+in vec2 TexCoord;
+
+uniform sampler2D screenTexture;  // rendered scene texture
+uniform float windSpeed;        // wind speed (0.0 to 1.0)
+uniform float blurFactor;      // factor wich indicates how much against the wind i am
+
+int blurSamples = 50;
+vec2 offset = vec2(1.0f,0.0f);
+
+void main() {
+    vec4 color = texture(screenTexture, TexCoord);
+    vec4 accumulatedColor = color;
+    
+    // Scale the wind direction by wind speed for motion blur intensity
+    vec2 blurOffset = offset * blurFactor * windSpeed * 0.0003; // the last factor found expirementally
+
+    // Accumulate samples along the wind direction
+    for (int i = 1; i <= blurSamples; ++i) {
+        vec2 offset = float(i) * blurOffset;
+        accumulatedColor += texture(screenTexture, TexCoord + offset);
+        accumulatedColor += texture(screenTexture, TexCoord - offset);
+    }
+
+    // Average the color
+    accumulatedColor /= (2.0 * float(blurSamples) + 1.0);
+    
+    FragColor = accumulatedColor;
+}
+

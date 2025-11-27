@@ -1,0 +1,86 @@
+#version 330 core // Specify GLSL version 330, compatible with OpenGL 3.3
+
+layout(location = 0) in vec3 vertexPosition_modelspace; // Input attribute for the 3D position of each vertex in model space
+layout(location = 1) in vec2 vertexUV; // Input attribute for the UV coordinates for texture mapping at each vertex
+
+out vec2 UV; // Output variable to pass UV coordinates to the fragment shader for texture lookup
+out vec4 mpos;
+// Uniform 4x4 Model-View-Projection matrix that transforms vertices to screen space
+uniform mat4 Vi;
+uniform mat4 Mo;
+uniform mat4 Pr;
+uniform float time;
+
+uniform int rotationalDistortion;
+uniform int voxelising; 
+uniform float rottime;
+
+float theta;
+float d = 920/2.0f ; // max z (920 is the dimension of the world in z axis)
+float w = 1222/2.0f ; // max x
+vec3 pos_after_Rot(vec3 pos, float theta);
+float r;
+vec4 newPos;
+
+float gridSize = 3.0;  // Size of each voxel
+float gap = 1.0;// * time ; 
+
+
+void main()
+{
+    // swaying more intense according to the attitude
+    float attitude = 0.01*Mo[3][1]; // *0.01 because max height=100 
+    float factor = vertexPosition_modelspace.y; // because i dont want to sway the lowest part of the plant
+    factor *= 0.05*factor; // because i want the tree to bend from swaying
+    vec3 swaying = vec3(0.08f * sin(3 * time), 0.0f, 0.02f * sin(5 * time));
+    vec3 SvertexPosition_modelspace = vertexPosition_modelspace + attitude*factor*swaying;
+    
+
+    vec4 mpos = Mo * vec4(SvertexPosition_modelspace, 1);
+
+    vec4 vSvertexPosition_modelspace = mpos;
+    if (voxelising!=0){
+        
+        vSvertexPosition_modelspace.x = floor(mpos.x / gridSize) * gridSize;
+        vSvertexPosition_modelspace.y = floor(mpos.y / gridSize) * gridSize;
+        vSvertexPosition_modelspace.z = floor(mpos.z / gridSize) * gridSize;
+        if (voxelising==3){
+            vec3 voxelIndex = floor(mpos.xyz / gridSize); // calculates the grid index
+            vSvertexPosition_modelspace.xyz = mpos.xyz + voxelIndex * gap;
+        }
+        
+    }
+
+    mpos = vSvertexPosition_modelspace;
+
+    newPos = mpos;
+    theta = 0.5*rottime;
+    if (rotationalDistortion==1){
+        newPos.xyz = pos_after_Rot( mpos.xyz , theta);
+    }
+    gl_Position =  Pr * Vi * vec4(newPos.xyz, 1);
+    // Pass the vertex's UV coordinates to the fragment shader by assigning them to 'UV'
+    UV = vertexUV;
+}
+
+vec3 pos_after_Rot(vec3 pos, float theta){
+    
+    vec3 newpos;
+
+    float xfactor = (pos.x+w)/1222.0f ; // because i want the bending to be more rapid as x increases
+    float zo = pos.z;
+    float yo = pos.y;
+    //theta = xfactor * theta; // this way the points with the smallest x values dont bend at all
+    theta = theta - 0.8*xfactor * theta; // this way all the points follow the rotation
+    float r = d/theta;
+
+    float theta1 = zo/r;
+
+    newpos.x = pos.x;
+    newpos.y = r - r*cos(theta1) + yo*cos(theta1);
+    newpos.z = r*sin(theta1) - yo*sin(theta1);
+
+    return newpos;
+
+
+}

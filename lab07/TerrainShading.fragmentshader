@@ -1,0 +1,110 @@
+#version 330 core
+
+out vec4 FragColor;
+
+in float Height;
+in vec2 TexCoord;
+in vec2 TexCoord2;
+in vec4 Positionc; // Vertex position cameraspace
+in vec4 Positionw; // Vertex position worldspace
+in vec4 Normalc; // Vertex normal cameraspace
+in vec4 Normalw; // Vertex normal worldspace
+in vec4 lightDirectionc;
+in vec4 lightDirectionw;
+in vec3 posModelspace;
+
+uniform sampler2D terrainTextureSampler;
+uniform sampler2D snowTextureSampler;
+uniform sampler2D waterTextureSampler;
+uniform float time;
+uniform int voxelising; 
+
+float gridSize = 3.0;  // Size of each voxel
+float gap = 1.0;// * time; 
+
+void phong(float visibility);
+// light properties
+struct dirLight {
+    vec4 La;
+    vec4 Ld;
+    vec4 Ls;
+    vec3 lightDirection;
+    float power;
+};
+uniform dirLight sun;
+
+vec4 textureColor;
+vec4 lightColor;
+
+void main()
+{
+
+    if (voxelising==2||voxelising==3){
+        // Compute local position inside the voxel
+        vec3 localPos = mod(posModelspace, gridSize + gap);
+
+        // If the fragment is inside the gap, discard it
+        if (localPos.x > gridSize || localPos.z > gridSize || localPos.z > gridSize) {
+            discard;  // This makes the gap fully transparent
+        }
+    }
+    
+
+
+    float h = (Height)/100.0f;	// Normalize height
+    
+    vec4 groundColor = vec4(texture(terrainTextureSampler, TexCoord).rgb, 1.0);
+    vec4 snowColor = vec4(texture(snowTextureSampler, TexCoord2).rgb, 1.0);
+    vec4 waterColor = vec4(texture(waterTextureSampler, TexCoord2).rgb, 1.0);
+    vec4 movingwaterColor = vec4(texture(waterTextureSampler, TexCoord2 +  time).rgb, 1.0);
+
+    if(Height<0.1f)
+    {
+        textureColor = vec4(mix(waterColor, movingwaterColor, 0.6).rgb, 1.0);
+    }
+
+    else if (Height < 50.0f) {
+        textureColor = groundColor;
+    } 
+    else {
+        // High heights: Blend rock and snow
+        float blendFactor = (Height - 50.0f) / (100.0f - 70.0f); //the 70 should be 50 but i wanted a more rapid change into snow
+        textureColor = mix(groundColor, snowColor, blendFactor);
+    }
+
+    phong(1.0f); 
+    textureColor.rgb = textureColor.rgb * lightColor.rgb;
+    FragColor = textureColor ;
+    
+}
+
+void phong(float visibility) {
+   
+    vec4 _Ks = vec4(1.0f);
+    vec4 _Kd = vec4(1.0f);
+    vec4 _Ka = vec4(0.5f);
+    float _Ns = 5.0f;
+    
+    vec4 Ia = vec4( 1, 1, 1, 1 ) * _Ka;
+
+    // model diffuse intensity (Id)
+    vec4 N = normalize(Normalc); 
+    vec4 L = normalize(-lightDirectionc);
+    float cosTheta = clamp(dot(N, L), 0, 1);
+    //vec4 Id = sun.Ld * _Kd * cosTheta;
+    vec4 Id = vec4( 1, 1, 1, 1 ) * _Kd * cosTheta;
+
+    // model specular intensity (Is)
+    vec4 R = reflect(-L, N);
+    vec4 E = normalize(vec4(0, 0, 0, 1) - Positionc);
+    float cosAlpha = clamp(dot(E, R), 0, 1);
+    float specular_factor = pow(cosAlpha, _Ns);
+    //vec4 Is = sun.Ls * _Ks * specular_factor;
+    vec4 Is = vec4( 1, 1, 1, 1 ) * _Ks * specular_factor;
+
+    // final fragment color
+    lightColor = vec4(
+        Ia + 
+        Id * visibility +   // Task 4.3 Use visibility
+        Is * visibility );
+}

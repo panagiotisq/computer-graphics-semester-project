@@ -1,0 +1,47 @@
+#version 330 core // Specify GLSL version 330, compatible with OpenGL 3.3
+
+// Input UV coordinates from the vertex shader
+in vec2 UV;
+in vec4 mpos;
+
+// Uniforms
+
+uniform sampler2D textureSampler; // Main texture sampler
+uniform int vegcolor;
+uniform float time;
+uniform int voxelising; 
+
+float gridSize = 3.0;  // Size of each voxel
+float gap = 1.0; // * time; 
+// Output color variable for the final color of each fragment
+out vec4 color;
+
+void main()
+{
+    if (voxelising==2||voxelising==3){
+        // Compute local position inside the voxel
+        vec3 localPos = mod(mpos.xyz, gridSize + gap);
+
+        // If the fragment is inside the gap, discard it
+        if (localPos.x > gridSize || localPos.z > gridSize || localPos.z > gridSize) {
+            discard;  // This makes the gap fully transparent
+        }
+    }
+    // Sample the main texture using the input UV coordinates
+    vec4 main_texture = vec4(texture(textureSampler, UV).rgb, 1.0);
+    // Set the fragment color initially to the main texture color
+    color = main_texture;
+    
+    if(vegcolor==0){
+        color = 0.7*vec4(136/255.0f, 79/255.0f, 36/255.0f, 1.0);
+    }
+    if(vegcolor==1){
+        color = 0.7*vec4(0.4, 0.7, 0.2, 1.0);
+    }
+    /*
+    color = main_texture;
+    if (color.r > 0.9 && color.g > 0.9 && color.b > 0.9) {// if Color is almost white
+        color.w =0.0f;
+    }
+    */
+}
