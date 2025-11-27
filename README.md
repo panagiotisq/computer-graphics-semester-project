@@ -4,7 +4,7 @@
 
 This is a comprehensive computer graphics project, developed in C++ and OpenGL, focusing on procedurally generating a dynamic, high-altitude hiking experience. The project emphasizes advanced techniques in environment simulation, atmospheric effects, and visual distortion.
 
-## ✨ Features & Graphical Techniques
+## ✨💡 Features & Graphical Techniques
 
 The project is structured into two main parts, demonstrating a broad range of graphics concepts:
 
@@ -72,6 +72,5 @@ You will need:
 
 4.  **Build the Project:**
     * **Visual Studio:** Open the generated **`.sln`** file in the `build` directory. Set the executable project (likely `lab07` or `mountainhiking`) as the **Startup Project** and run **Build All**.
-      *
 
 5.  **Run:** The executable will be found within your chosen build output folder. Look for an executable named **`lab07.exe`** (or `./lab07` on Linux/Mac).
