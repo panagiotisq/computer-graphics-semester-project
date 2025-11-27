@@ -23,14 +23,6 @@ Release/
 *.suo
 *.sln.docstates
 
-# --- Temporary/Personal Files ---
-# Ignore large document files that are not part of the core code/spec
-*.docx
-*.pdf
-
-# Ignore specific image files you mentioned
-εικόνα_Viber_*.jpg
-
 # Ignore temporary files created by editors or OS
 *~
 Thumbs.db
