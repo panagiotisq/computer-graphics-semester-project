@@ -51,7 +51,7 @@ You will need:
 
 1.  **Navigate to the Project Root:** Open your terminal (PowerShell, CMD, or bash) and go to the `mountainhiking` folder (where `CMakeLists.txt` is located).
     ```bash
-    cd "Q:\hmte\7ο εξαμηνο\graphics VR\labs\mountainhiking"
+    cd "yourpath"
     ```
 
 2.  **Create and Enter the Build Directory:**
