@@ -1,171 +1,80 @@
+# 🏔️ Mountain Hiking: Procedural Graphics Semester Project
 
-# computer-graphics-semester-project
-Procedurally generates a mountainous hiking scene with first-person controls, dynamic terrain, vegetation, and atmospheric effects. Features include rotational world distortion, voxelizing world distortion, altitude-based effects, fog, and particle effects.
+## 🎯 Project Overview
 
-Introduction
-------------
+This is a comprehensive computer graphics project, developed in C++ and OpenGL, focusing on procedurally generating a dynamic, high-altitude hiking experience. The project emphasizes advanced techniques in environment simulation, atmospheric effects, and visual distortion.
 
-All tutorials can be built on Windows, Linux and Mac. For all these platforms,
-the procedure is roughly the same:
+## ✨ Features & Graphical Techniques
 
-- Update your drivers!
-- Download a compiler, if you don’t already have one.
-- Install CMake
-- Download the source code
-- Generate a project using CMake
-- Build the project using your compiler
+The project is structured into two main parts, demonstrating a broad range of graphics concepts:
 
-Detailed procedures will now be given for each platform. Adaptations may be
-required. If unsure, read the instruction for Windows and try to adapt them.
+### Part A: Environmental Simulation
 
-Building on Windows
--------------------
+| Feature | Graphics Concept |
+| :--- | :--- |
+| **1. High-Altitude Terrain** | Random generation of detailed, large-scale mountainous geometry. |
+| **2. Textured Ground & Vegetation** | Applying tiling textures with **random rotation/flipping** to eliminate repetitiveness. Sparse vegetation (trees/plants) is added for detail. |
+| **3. First-Person Controller** | Implementation of a character controller, allowing ground-based movement (walking/climbing, not flying). |
+| **4. Directional Lighting** | Simulating the sun's position and global light direction. |
+| **5. Skybox** | Creating an infinite, surrounding backdrop for the scene. |
 
--   Updating your drivers should be easy. Just go to NVIDIA’s or AMD’s
-    website and download the drivers. If unsure about your GPU model :
-    Control Panel -\> System and Security -\> System -\> Device
-    Manager -\> Display adapter. If you have an integrated Intel GPU,
-    drivers are usually provided by your OEM (Dell, HP, …).
--   We suggest using Visual Studio 2017 Express for Desktop as a
-    compiler. You can download it for free
-    [here](https://www.visualstudio.com/en-US/products/visual-studio-express-vs).
-    MAKE SURE YOU CHOOSE CUSTOM INSTALLATION AND CHECK C++. If you
-    prefer using MinGW, we recommend using [Qt
-    Creator](http://qt-project.org/). Install whichever you want.
-    Subsequent steps will be explained with Visual Studio, but should be
-    similar with any other IDE.
--   Download
-    [CMake](http://www.cmake.org/cmake/resources/software.html)from here
-    and install it
--   [Download the source code](http://www.opengl-tutorial.org/download/)
-    and unzip it, for instance in
-    C:\\Users\\XYZ\\Projects\\OpenGLTutorials\\ .
--   Launch CMake. In the first line, navigate to the unzipped folder. If
-    unsure, choose the folder that contains the CMakeLists.txt file. In
-    the second line, enter where you want all the compiler’s stuff to
-    live. For instance, you can choose
-    C:\\Users\\XYZ\\Projects\\OpenGLTutorials-build-Visual2017-64bits\\,
-    or
-    C:\\Users\\XYZ\\Projects\\OpenGLTutorials\\build\\Visual2017-32bits.
-    Notice that it can be anywhere, not necessarily in the same folder.
-    ![](fig/CMake.png)
+### Part B: Dynamic and Advanced Effects
 
--   Click on the Configure button. Since this is the first time you
-    configure the project, CMake will ask you which compiler you would
-    like to use. Choose wisely depending on step 1. If you have a 64 bit
-    Windows, you can choose 64 bits; if you don’t know, choose 32 bits.
--   Click on Configure until all red lines disappear. Click on Generate.
-    Your Visual Studio project is now created. You can now forget about
-    CMake.
--   Open
-    C:\\Users\\XYZ\\Projects\\OpenGLTutorials-build-Visual2010-32bits.
-    You will see a Tutorials.sln file : open it with Visual Studio.
-    ![](fig/directories.png)
+| Feature | Graphics Concept |
+| :--- | :--- |
+| **6. Wind Simulation** | Player **movement speed is reduced based on altitude** (stronger wind). Accompanied by **wind howling sound effects** tied to the character's height. |
+| **7. View Bobbing** | Camera movement simulating the character's footsteps, making the wind's slowing effect more prominent. |
+| **8. Altitude Fog** | Implementation of a **fog effect concentrated near mountain peaks**. |
+| **9. Flying Particles** | Particle system simulation of dust and debris carried by the wind. |
+| **10. Rotational World Distortion** | Advanced visual effect where the entire world is **rotated and distorted** around the user, simulating a visual anomaly to be escaped. |
+| **11. Voxelizing Scene Destruction** | An effect that simulates scene destruction by **voxelizing and quantizing** the geometry of the scene and objects. |
 
-In the *Build* menu, click *Build All*. Every tutorial and dependency
-will be compiled. Each executable will also be copied back into
-C:\\Users\\XYZ\\Projects\\OpenGLTutorials\\ . Hopefuly no error occurs.
-![](fig/visual_2010.png)
+### 💎 Bonus Features
 
--   Open C:\\Users\\XYZ\\Projects\\OpenGLTutorials\\playground, and
-    launch playground.exe. A black window should appear.
-    ![](fig/empty_window.png)
+* **Swaying Vegetation:** Realistic plant movement implemented via the **vertex shader**, with the intensity of the sway increasing with altitude.
+* **Screen Space Motion Blur:** Applying a directional blur effect aligned with the wind direction.
 
-You can also launch any tutorial from inside Visual Studio. Right-click
-on Playground once, “Choose as startup project”. You can now debug the
-code by pressing F5.
+---
 
-![](fig/StartupProject.png)
+## 🛠️ Building the Project
 
-Building on Linux
------------------
+The project uses the **CMake** build system to generate project files for cross-platform compatibility.
 
-They are so many Linux variants out there that it’s impossible to list
-every possible platform. Adapt if required, and don’t hesitate to read
-your distribution’s documentation.
+### Prerequisites
 
--   Install the latest drivers. We highly recommend the closed-source
-    binary drivers. It’s not GNU or whatever, but they work. If your
-    distribution doesn’t provide an automatic install, try [Ubuntu’s
-    guide](http://help.ubuntu.com/community/BinaryDriverHowto).
--   Install all needed compilers, tools & libs. Complete list is :
-    *cmake make g++ libx11-dev libxi-dev libgl1-mesa-dev
-    libglu1-mesa-dev libxrandr-dev libxext-dev libxcursor-dev
-    libxinerama-dev libxi-dev* . Use
-    `sudo apt-get install *****`{.highlighter-rouge} or
-    `su && yum install ******`{.highlighter-rouge}.
--   [Download the source code](http://www.opengl-tutorial.org/download/)
-    and unzip it, for instance in \~/Projects/OpenGLTutorials/
--   cd in \~/Projects/OpenGLTutorials/ and enter the following commands
-    :
+You will need:
+* A **C++ Compiler** (e.g., Visual Studio Community Edition, GCC/G++, Clang).
+* **CMake** (Download and install the latest version from [cmake.org](https://cmake.org/)).
+* All dependencies (GLM, GLEW, GLFW, SFML, etc.) are included in the `external/` folder.
 
--   mkdir build
--   cd build
--   cmake ..
+### Build Steps (Cross-Platform)
 
--   A makefile has been created in the build/ directory.
--   type “make all”. Every tutorial and dependency will be compiled.
-    Each executable will also be copied back into
-    \~/Projects/OpenGLTutorials/ . Hopefuly no error occurs.
--   Open \~/Projects/OpenGLTutorials/playground, and launch
-    ./playground. A black window should appear.
+1.  **Navigate to the Project Root:** Open your terminal (PowerShell, CMD, or bash) and go to the `mountainhiking` folder (where `CMakeLists.txt` is located).
+    ```bash
+    cd "Q:\hmte\7ο εξαμηνο\graphics VR\labs\mountainhiking"
+    ```
 
-Note that you really should use an IDE like [Qt
-Creator](http://qt-project.org/). In particular, this one has built-in
-support for CMake, and it will provide a much nicer experience when
-debugging. Here are the instructions for QtCreator :
+2.  **Create and Enter the Build Directory:**
+    ```bash
+    mkdir build
+    cd build
+    ```
 
--   In QtCreator, go to File-\>Tools-\>Options-\>Compile&Execute-\>CMake
--   Set the path to CMake. This is most probably /usr/bin/cmake
--   File-\>Open Project; Select tutorials/CMakeLists.txt
--   Select a build directory, preferably outside the tutorials folder
--   Optionally set -DCMAKE\_BUILD\_TYPE=Debug in the parameters box.
-    Validate.
--   Click on the hammer on the bottom. The tutorials can now be launched
-    from the tutorials/ folder.
--   To run the tutorials from QtCreator, click on Projects-\>Execution
-    parameters-\>Working Directory, and select the directory where the
-    shaders, textures & models live. Example for tutorial 2 :
-    \~/opengl-tutorial/tutorial02\_red\_triangle/
+3.  **Generate Project Files:** Run CMake, specifying your desired build environment.
 
-Building on Mac
----------------
+    ```bash
+    # For Windows with Visual Studio 2022
+    cmake .. -G "Visual Studio 17 2022" 
 
-The procedure is very similar to Windows’ (Makefiles are also supported,
-but won’t be explained here) :
+    # OR, for Linux/macOS command line build
+    cmake .. 
+    ```
 
--   Install XCode from the Mac App Store
--   [Download
-    CMake](http://www.cmake.org/cmake/resources/software.html), and
-    install the .dmg . You don’t need to install the command-line tools.
--   [Download the source code](http://www.opengl-tutorial.org/download/)
-    and unzip it, for instance in \~/Projects/OpenGLTutorials/ .
--   Launch CMake (Applications-\>CMake). In the first line, navigate to
-    the unzipped folder. If unsure, choose the folder that contains the
-    CMakeLists.txt file. In the second line, enter where you want all
-    the compiler’s stuff to live. For instance, you can choose
-    \~/Projects/OpenGLTutorials\_bin\_XCode/. Notice that it can be
-    anywhere, not necessarily in the same folder.
--   Click on the Configure button. Since this is the first time you
-    configure the project, CMake will ask you which compiler you would
-    like to use. Choose Xcode.
--   Click on Configure until all red lines disappear. Click on Generate.
-    Your Xcode project is now created. You can forget about CMake.
--   Open \~/Projects/OpenGLTutorials\_bin\_XCode/ . You will see a
-    Tutorials.xcodeproj file : open it.
--   Select the desired tutorial to run in Xcode’s Scheme panel, and use
-    the Run button to compile & run :
+4.  **Build the Project:**
+    * **Visual Studio:** Open the generated **`.sln`** file in the `build` directory. Set the executable project (likely `lab07` or `mountainhiking`) as the **Startup Project** and run **Build All**.
+    * **Linux/macOS (Makefiles):**
+        ```bash
+        make
+        ```
 
-![](fig/Xcode-projectselection.png)
-
-Note for Code::Blocks
----------------------
-
-Due to 2 bugs (one in C::B, one in CMake), you have to edit the
-command-line in Project-\>Build Options-\>Make commands, as follows :
-
-![](fig/CodeBlocksFix.png)
-
-You also have to setup the working directory yourself :
-Project-\>Properties -\> Build targets -\> tutorial N -\> execution
-working dir ( it’s src\_dir/tutorial\_N/ ).
+5.  **Run:** The executable will be found within your chosen build output folder. Look for an executable named **`lab07.exe`** (or `./lab07` on Linux/Mac).
